@@ -1,0 +1,11 @@
+LICENSE
+README.md
+pyproject.toml
+app/__init__.py
+app/config.py
+app/main.py
+parallelproof.egg-info/PKG-INFO
+parallelproof.egg-info/SOURCES.txt
+parallelproof.egg-info/dependency_links.txt
+parallelproof.egg-info/requires.txt
+parallelproof.egg-info/top_level.txt

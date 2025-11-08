@@ -1,1 +1,37 @@
 .ideas
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+.Python
+
+# Environment variables
+.env
+.env.local
+
+# Database
+*.db
+*.sqlite
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node
+node_modules/
+dist/
+build/
+.next/
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db

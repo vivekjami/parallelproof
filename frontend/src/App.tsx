@@ -32,6 +32,79 @@ function App() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [completedCount, setCompletedCount] = useState(0);
   const [bestResult, setBestResult] = useState<AgentResult | null>(null);
+  const [isDemoMode, setIsDemoMode] = useState(false);
+  const [selectedCode, setSelectedCode] = useState<{ strategy: string; code: string } | null>(null);
+
+  // Demo mode - populate with test data
+  const startDemoMode = () => {
+    setIsDemoMode(true);
+    setTaskId('demo-task-123');
+    setCode(`// Sample Python code for optimization demo
+def find_user(users, target_id):
+    for i in range(len(users)):
+        if users[i].id == target_id:
+            return users[i]
+    return None`);
+    
+    // Simulate agent results appearing over time
+    const demoResults: AgentResult[] = [
+      {
+        agent_id: '1',
+        strategy: 'Hash Map Optimization',
+        optimized_code: 'user_map = {user.id: user for user in users}\nreturn user_map.get(target_id)',
+        improvement_percent: 42.5,
+        status: 'completed',
+        error_message: null,
+      },
+      {
+        agent_id: '2',
+        strategy: 'Binary Search with Sorting',
+        optimized_code: 'sorted_users = sorted(users, key=lambda u: u.id)\n# Binary search implementation',
+        improvement_percent: 38.2,
+        status: 'completed',
+        error_message: null,
+      },
+      {
+        agent_id: '3',
+        strategy: 'List Comprehension',
+        optimized_code: 'return next((user for user in users if user.id == target_id), None)',
+        improvement_percent: 15.7,
+        status: 'completed',
+        error_message: null,
+      },
+      {
+        agent_id: '4',
+        strategy: 'Index Caching',
+        optimized_code: null,
+        improvement_percent: 0,
+        status: 'running',
+        error_message: null,
+      },
+      {
+        agent_id: '5',
+        strategy: 'Parallel Processing',
+        optimized_code: null,
+        improvement_percent: 0,
+        status: 'failed',
+        error_message: 'Overhead exceeds benefits for small datasets',
+      },
+    ];
+
+    // Simulate staggered results
+    let count = 0;
+    const interval = setInterval(() => {
+      if (count < demoResults.length) {
+        setAgentResults((prev) => [...prev, demoResults[count]]);
+        if (demoResults[count].status === 'completed') {
+          setCompletedCount((prev) => prev + 1);
+        }
+        count++;
+      } else {
+        clearInterval(interval);
+        setBestResult(demoResults[0]); // Best result
+      }
+    }, 800);
+  };
 
   // WebSocket connection
   useEffect(() => {
@@ -145,6 +218,16 @@ function App() {
                   {completedCount}/{numAgents}
                 </div>
               </div>
+            )}
+            {!taskId && (
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={startDemoMode}
+                className="px-4 py-2 rounded-lg bg-gradient-to-r from-[#00B4D8] to-[#0096C7] text-white text-sm font-semibold shadow-lg shadow-[#00B4D8]/30"
+              >
+                🎬 Demo Mode
+              </motion.button>
             )}
           </div>
         </div>
@@ -354,6 +437,19 @@ function App() {
                         <div className="text-3xl font-bold text-[#00B4D8]">
                           {result.improvement_percent.toFixed(1)}%
                         </div>
+                        {result.optimized_code && (
+                          <button
+                            onClick={() => {
+                              setSelectedCode({
+                                strategy: result.strategy,
+                                code: result.optimized_code || '',
+                              });
+                            }}
+                            className="mt-3 w-full px-3 py-2 bg-[#00B4D8]/20 hover:bg-[#00B4D8]/30 border border-[#00B4D8]/40 rounded-lg text-xs text-[#00B4D8] font-semibold transition-all"
+                          >
+                            �️ View Code
+                          </button>
+                        )}
                       </div>
                     )}
 
@@ -409,6 +505,66 @@ function App() {
           </p>
         </div>
       </footer>
+
+      {/* Code Preview Modal */}
+      <AnimatePresence>
+        {selectedCode && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+            onClick={() => setSelectedCode(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              className="bg-gradient-to-br from-[#1A2332] to-[#0A1929] rounded-xl p-6 border-2 border-[#00B4D8] shadow-2xl max-w-3xl w-full max-h-[80vh] overflow-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-bold text-[#00B4D8]">
+                  {selectedCode.strategy}
+                </h3>
+                <button
+                  onClick={() => setSelectedCode(null)}
+                  className="text-[#E9ECEF]/60 hover:text-[#E9ECEF] text-2xl"
+                >
+                  ✕
+                </button>
+              </div>
+              
+              <div className="mb-4">
+                <div className="text-sm text-[#E9ECEF]/60 mb-2">Optimized Code:</div>
+                <pre className="bg-[#0A1929] border border-[#00B4D8]/30 rounded-lg p-4 overflow-x-auto">
+                  <code className="text-[#06FFA5] text-sm font-mono">
+                    {selectedCode.code}
+                  </code>
+                </pre>
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(selectedCode.code);
+                    alert('Code copied to clipboard!');
+                  }}
+                  className="flex-1 px-4 py-3 bg-gradient-to-r from-[#00B4D8] to-[#0096C7] hover:from-[#0096C7] hover:to-[#00B4D8] text-white font-semibold rounded-lg shadow-lg shadow-[#00B4D8]/30 transition-all"
+                >
+                  📋 Copy Code
+                </button>
+                <button
+                  onClick={() => setSelectedCode(null)}
+                  className="px-4 py-3 bg-[#E9ECEF]/10 hover:bg-[#E9ECEF]/20 text-[#E9ECEF] font-semibold rounded-lg transition-all"
+                >
+                  Close
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

@@ -4,6 +4,17 @@ pyproject.toml
 app/__init__.py
 app/config.py
 app/main.py
+app/agents/__init__.py
+app/agents/optimizer.py
+app/agents/strategies.py
+app/api/__init__.py
+app/api/optimization.py
+app/core/__init__.py
+app/core/database.py
+app/services/__init__.py
+app/services/fork_manager.py
+app/services/gemini_service.py
+app/services/hybrid_search.py
 parallelproof.egg-info/PKG-INFO
 parallelproof.egg-info/SOURCES.txt
 parallelproof.egg-info/dependency_links.txt

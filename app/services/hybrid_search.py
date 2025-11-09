@@ -1,6 +1,6 @@
 """Hybrid search combining BM25 and vector similarity"""
 import logging
-from typing import List
+from typing import List, Dict
 import asyncpg
 
 from app.core.database import db
@@ -9,7 +9,7 @@ from app.services.gemini_service import gemini_service
 logger = logging.getLogger(__name__)
 
 
-async def hybrid_search(query_text: str, category: str, limit: int = 5) -> List[asyncpg.Record]:
+async def hybrid_search(query_text: str, category: str, limit: int = 5) -> List[Dict]:
     """
     Hybrid search combining BM25 (keyword) and vector similarity
     Uses Reciprocal Rank Fusion (RRF) to combine results
@@ -85,8 +85,8 @@ async def hybrid_search(query_text: str, category: str, limit: int = 5) -> List[
             reverse=True
         )
         
-        # Extract just the pattern records
-        top_patterns = [r['pattern'] for r in sorted_results[:limit]]
+        # Extract just the pattern records and ensure they're proper dicts
+        top_patterns = [dict(r['pattern']) for r in sorted_results[:limit]]
         
         logger.info(f"Hybrid search returned {len(top_patterns)} results for category: {category}")
         return top_patterns
@@ -97,7 +97,7 @@ async def hybrid_search(query_text: str, category: str, limit: int = 5) -> List[
         return await bm25_search(query_text, category, limit)
 
 
-async def bm25_search(query_text: str, category: str, limit: int = 5) -> List[asyncpg.Record]:
+async def bm25_search(query_text: str, category: str, limit: int = 5) -> List[Dict]:
     """
     BM25-only fallback search
     
@@ -122,7 +122,8 @@ async def bm25_search(query_text: str, category: str, limit: int = 5) -> List[as
         
         results = await db.fetch(query, category, query_text, limit)
         logger.info(f"BM25 search returned {len(results)} results for category: {category}")
-        return results
+        # Convert asyncpg.Record to dict
+        return [dict(r) for r in results]
         
     except Exception as e:
         logger.error(f"BM25 search error: {e}")

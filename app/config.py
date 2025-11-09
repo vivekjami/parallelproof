@@ -22,6 +22,7 @@ class Settings(BaseSettings):
     allowed_origins: str = '["http://localhost:3000","http://localhost:5173"]'
     
     # Fork Configuration
+    tiger_use_virtual_forks: bool = True  # Free tier uses virtual forks
     max_concurrent_forks: int = 100
     fork_timeout_seconds: int = 300
     fork_cleanup_enabled: bool = True

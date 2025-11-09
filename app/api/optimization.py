@@ -166,29 +166,22 @@ async def run_optimization(task_id: str, code: str, language: str, num_agents: i
         
         # Broadcast start message
         await manager.broadcast(task_id, {
-            "type": "task_started",
-            "task_id": task_id,
-            "num_agents": num_agents
+            "type": "status",
+            "data": {"status": "running"}
         })
         
         # Create fork manager
         fork_manager = ForkManager(settings.tiger_service_name)
         
-        # Create parallel forks (this takes 2-3 seconds per fork, but runs in parallel)
+        # Create parallel forks (virtual on free tier)
         logger.info(f"Creating {num_agents} forks...")
         fork_ids = await fork_manager.create_parallel_forks(num_agents)
         
+        logger.info(f"Fork IDs returned: {fork_ids}")
         if not fork_ids:
             raise Exception("Failed to create any forks")
         
-        # Broadcast forks created
-        await manager.broadcast(task_id, {
-            "type": "forks_created",
-            "count": len(fork_ids),
-            "requested": num_agents
-        })
-        
-        # Create agents with different strategies (cycle through available strategies)
+        # Create agents with different strategies
         agents = []
         for i, fork_id in enumerate(fork_ids):
             strategy = STRATEGIES[i % len(STRATEGIES)]
@@ -205,18 +198,40 @@ async def run_optimization(task_id: str, code: str, language: str, num_agents: i
         
         # Process and broadcast results
         successful_results = []
-        for result in results:
+        logger.info(f"Raw agent results (len={len(results)}): {results}")
+        for idx, result in enumerate(results):
+            # If the task raised an exception (unexpected), log detailed info
             if isinstance(result, Exception):
-                logger.error(f"Agent failed with exception: {result}")
+                logger.exception(f"Agent index {idx} raised exception: {result}")
+                # Insert a failed result record for visibility
+                try:
+                    await db.execute(
+                        """
+                        INSERT INTO agent_results (task_id, fork_id, agent_id, strategy, original_code, error_message, status, completed_at)
+                        VALUES ($1, $2, $3, $4, $5, $6, 'failed', NOW())
+                        """,
+                        task_id,
+                        agents[idx].fork_id if idx < len(agents) else 'unknown',
+                        agents[idx].agent_id if idx < len(agents) else f'agent-{idx}',
+                        agents[idx].strategy.name if idx < len(agents) else 'unknown',
+                        code,
+                        str(result)
+                    )
+                except Exception:
+                    logger.exception("Failed to record agent exception to DB")
                 continue
-            
+
+            # Normal successful dict result from AgentOptimizer.optimize
             successful_results.append(result)
-            
+
             # Broadcast individual agent completion
-            await manager.broadcast(task_id, {
-                "type": "agent_completed",
-                "data": result
-            })
+            try:
+                await manager.broadcast(task_id, {
+                    "type": "agent_completed",
+                    "data": result
+                })
+            except Exception:
+                logger.exception("Failed to broadcast agent result")
         
         # Find best result
         best_result = None
@@ -251,10 +266,8 @@ async def run_optimization(task_id: str, code: str, language: str, num_agents: i
         
         # Broadcast completion
         await manager.broadcast(task_id, {
-            "type": "complete",
-            "task_id": task_id,
-            "total_agents": len(agents),
-            "successful_agents": len(successful_results),
+            "type": "completion",
+            "message": "Optimization completed",
             "best_result": best_result
         })
         

@@ -125,10 +125,10 @@ function App() {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0A1929] via-[#1A2332] to-[#0A1929]">
+    <div className="min-h-screen w-full bg-gradient-to-br from-[#0A1929] via-[#1A2332] to-[#0A1929] overflow-x-hidden">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-[#0A1929]/80 backdrop-blur-lg border-b border-[#FF6B35]/20">
-        <div className="max-w-7xl mx-auto px-6 py-4">
+      <header className="sticky top-0 z-50 bg-[#0A1929]/80 backdrop-blur-lg border-b border-[#FF6B35]/20 w-full">
+        <div className="w-full px-6 py-4">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold bg-gradient-to-r from-[#FF6B35] via-[#FF8C42] to-[#00B4D8] bg-clip-text text-transparent">
@@ -150,7 +150,7 @@ function App() {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-6 py-8">
+      <main className="w-full px-4 sm:px-6 lg:px-8 py-8">
         {/* Best Result Banner */}
         <AnimatePresence>
           {bestResult && (
@@ -158,7 +158,7 @@ function App() {
               initial={{ opacity: 0, y: -50 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -50 }}
-              className="mb-8 p-6 rounded-xl bg-gradient-to-r from-[#06FFA5]/10 to-[#00D9A3]/10 border-2 border-[#06FFA5]"
+              className="mb-8 p-6 rounded-xl bg-gradient-to-r from-[#06FFA5]/10 to-[#00D9A3]/10 border-2 border-[#06FFA5] max-w-6xl mx-auto"
             >
               <div className="flex items-center gap-4">
                 <div className="flex-shrink-0 w-16 h-16 rounded-full bg-gradient-to-br from-[#06FFA5] to-[#00D9A3] flex items-center justify-center">
@@ -193,7 +193,7 @@ function App() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-8"
+            className="mb-8 max-w-6xl mx-auto"
           >
             <div className="bg-gradient-to-br from-[#1A2332] to-[#0A1929] rounded-xl p-8 border border-[#FF6B35]/20 shadow-xl">
               <h2 className="text-2xl font-bold text-[#F8F9FA] mb-6">
@@ -287,12 +287,12 @@ function App() {
 
         {/* Agent Results Grid */}
         {taskId && agentResults.length > 0 && (
-          <div>
+          <div className="max-w-7xl mx-auto">
             <h2 className="text-2xl font-bold text-[#F8F9FA] mb-6">
               Agent Results ({completedCount}/{numAgents} Complete)
             </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               <AnimatePresence>
                 {sortedResults.map((result, idx) => (
                   <motion.div
@@ -383,7 +383,7 @@ function App() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="text-center py-16"
+            className="text-center py-16 max-w-2xl mx-auto"
           >
             <motion.div
               animate={{ rotate: 360 }}
@@ -401,8 +401,8 @@ function App() {
       </main>
 
       {/* Footer */}
-      <footer className="mt-16 py-8 border-t border-[#FF6B35]/20">
-        <div className="max-w-7xl mx-auto px-6 text-center">
+      <footer className="mt-16 py-8 border-t border-[#FF6B35]/20 w-full">
+        <div className="w-full px-6 text-center">
           <p className="text-sm text-[#E9ECEF]/60">
             Parallel code optimization powered by{' '}
             <span className="text-[#FF6B35] font-semibold">Tiger Cloud</span>'s instant database forks

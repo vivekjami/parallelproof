@@ -17,12 +17,12 @@ export interface OptimizationResponse {
 }
 
 export interface AgentResult {
-  agent_id: number;
-  strategy_name: string;
-  optimized_code: string;
+  agent_id: string;
+  strategy: string;
+  optimized_code: string | null;
   improvement_percent: number;
-  confidence: number;
-  explanation: string;
+  status: string;
+  error_message: string | null;
 }
 
 export interface TaskStatus {

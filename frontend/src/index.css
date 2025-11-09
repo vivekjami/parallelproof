@@ -1,5 +1,59 @@
 @import "tailwindcss";
 
+/* Tiger Cloud / Timescale DB Theme - Vibrant & Fun */
+
+@import "tailwindcss";
+
+/* CSS Custom Properties - Dark Tiger/Timescale Theme */
+:root {
+  /* Tiger Orange */
+  --tiger-orange: #FF6B35;
+  --tiger-orange-bright: #FF8C42;
+  
+  /* Timescale Blue */
+  --timescale-blue: #00B4D8;
+  --timescale-blue-bright: #0096C7;
+  
+  /* Purple Accent */
+  --purple-deep: #4A148C;
+  --purple-bright: #6A1B9A;
+  
+  /* Success Green */
+  --success-green: #06FFA5;
+  --success-green-bright: #00D9A3;
+  
+  /* Backgrounds */
+  --bg-dark: #0A1929;
+  --bg-card: #1A2332;
+  
+  /* Text */
+  --text-light: #F8F9FA;
+  --text-muted: #E9ECEF;
+}
+
+/* Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: #0A1929;
+  color: #F8F9FA;
+}
+
+code {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -12,8 +66,340 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(135deg, #fff5f0 0%, #ffffff 50%, #f0f9ff 100%);
+  min-height: 100vh;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  font-family: 'JetBrains Mono', 'Fira Code', source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  background: rgba(255, 107, 0, 0.1);
+  padding: 0.2em 0.4em;
+  border-radius: 0.25em;
+  font-size: 0.9em;
 }
+
+/* Custom Gradient Backgrounds */
+.tiger-gradient {
+  background: linear-gradient(135deg, var(--tiger-orange) 0%, var(--tiger-red) 100%);
+}
+
+.timescale-gradient {
+  background: linear-gradient(135deg, var(--timescale-blue) 0%, var(--timescale-cyan) 100%);
+}
+
+.vibrant-gradient {
+  background: linear-gradient(135deg, var(--tiger-orange) 0%, var(--purple) 50%, var(--timescale-blue) 100%);
+}
+
+/* Animated Gradient Border */
+@keyframes gradient-border {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animated-border {
+  position: relative;
+  background: white;
+  border-radius: 0.75rem;
+  padding: 2px;
+  background: linear-gradient(90deg, 
+    var(--tiger-orange), 
+    var(--tiger-yellow), 
+    var(--timescale-cyan), 
+    var(--purple),
+    var(--tiger-orange)
+  );
+  background-size: 300% 300%;
+  animation: gradient-border 4s ease infinite;
+}
+
+.animated-border-content {
+  background: white;
+  border-radius: 0.65rem;
+  padding: 2rem;
+}
+
+/* Glowing Effects */
+.glow-orange {
+  box-shadow: 0 0 20px rgba(255, 107, 0, 0.3),
+              0 0 40px rgba(255, 107, 0, 0.2),
+              0 0 60px rgba(255, 107, 0, 0.1);
+}
+
+.glow-blue {
+  box-shadow: 0 0 20px rgba(0, 102, 255, 0.3),
+              0 0 40px rgba(0, 102, 255, 0.2),
+              0 0 60px rgba(0, 102, 255, 0.1);
+}
+
+/* Pulse Animation */
+@keyframes pulse-orange {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(255, 107, 0, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 20px rgba(255, 107, 0, 0);
+  }
+}
+
+.pulse-orange {
+  animation: pulse-orange 2s infinite;
+}
+
+/* Shimmer Effect */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 107, 0, 0.1),
+    transparent
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 3s infinite;
+}
+
+/* Card Hover Effects */
+.card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1),
+              0 0 30px rgba(255, 107, 0, 0.1);
+}
+
+/* Tiger Stripes Pattern (Subtle) */
+.tiger-stripes {
+  background-image: 
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      rgba(255, 107, 0, 0.02) 10px,
+      rgba(255, 107, 0, 0.02) 20px
+    );
+}
+
+/* Progress Bar Animation */
+@keyframes progress {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+.progress-bar {
+  height: 4px;
+  background: linear-gradient(90deg, var(--tiger-orange), var(--tiger-yellow));
+  animation: progress 2s ease-out;
+}
+
+/* Floating Animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Gradient Text */
+.gradient-text {
+  background: linear-gradient(135deg, var(--tiger-orange) 0%, var(--timescale-blue) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Button Styles */
+.btn-tiger {
+  background: linear-gradient(135deg, var(--tiger-orange) 0%, var(--tiger-orange-dark) 100%);
+  color: white;
+  font-weight: 600;
+  padding: 1rem 2rem;
+  border-radius: 0.75rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 14px rgba(255, 107, 0, 0.3);
+}
+
+.btn-tiger:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 0, 0.4);
+}
+
+.btn-tiger:active {
+  transform: translateY(0);
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, var(--tiger-orange), var(--tiger-red));
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--tiger-orange-dark);
+}
+
+/* Selection Color */
+::selection {
+  background: var(--tiger-orange);
+  color: white;
+}
+
+::-moz-selection {
+  background: var(--tiger-orange);
+  color: white;
+}
+
+/* Loading Spinner */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner {
+  border: 3px solid rgba(255, 107, 0, 0.1);
+  border-top-color: var(--tiger-orange);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Tooltip */
+.tooltip {
+  position: relative;
+}
+
+.tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.5rem 1rem;
+  background: var(--tiger-orange);
+  color: white;
+  border-radius: 0.5rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  font-size: 0.875rem;
+}
+
+.tooltip:hover::after {
+  opacity: 1;
+}
+
+/* Status Indicators */
+.status-running {
+  position: relative;
+}
+
+.status-running::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--timescale-blue);
+  opacity: 0.3;
+  animation: pulse-blue 2s infinite;
+}
+
+@keyframes pulse-blue {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* Code Block Styling */
+pre {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%) !important;
+  border: 2px solid rgba(255, 107, 0, 0.2);
+  border-radius: 0.75rem;
+  padding: 1.5rem !important;
+  overflow-x: auto;
+  position: relative;
+}
+
+pre::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, 
+    var(--tiger-orange), 
+    var(--tiger-yellow), 
+    var(--timescale-cyan)
+  );
+}
+
+/* Responsive Utilities */
+@media (max-width: 768px) {
+  .animated-border-content {
+    padding: 1rem;
+  }
+  
+  .btn-tiger {
+    padding: 0.75rem 1.5rem;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .tiger-gradient,
+  .timescale-gradient,
+  .vibrant-gradient {
+    background: white !important;
+    color: black !important;
+  }
+}
+

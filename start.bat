@@ -1,22 +1,34 @@
 @echo off
-echo Starting ParallelProof Development Environment...
+echo ========================================
+echo       ParallelProof Full Stack
+echo ========================================
 echo.
 
-REM Start backend in a new window
-echo Starting backend server...
-start "ParallelProof Backend" cmd /k "cd /d %~dp0 && python -m uvicorn app.main:app --reload"
+REM Kill any existing processes
+echo Stopping existing processes...
+for /f "tokens=5" %%a in ('netstat -ano ^| findstr :8000') do taskkill /F /PID %%a > nul 2>&1
+for /f "tokens=5" %%a in ('netstat -ano ^| findstr :5174') do taskkill /F /PID %%a > nul 2>&1
+timeout /t 2 /nobreak > nul
 
-REM Wait a bit for backend to start
-timeout /t 3 /nobreak > nul
+echo.
+echo Starting Backend Server...
+start "ParallelProof Backend" cmd /k "cd /d %~dp0 && python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
 
-REM Start frontend in a new window
-echo Starting frontend server...
+echo Waiting for backend to start...
+timeout /t 5 /nobreak > nul
+
+echo.
+echo Starting Frontend Server...
 start "ParallelProof Frontend" cmd /k "cd /d %~dp0frontend && npm run dev"
 
 echo.
-echo ParallelProof is starting up!
-echo Backend: http://localhost:8000
-echo Frontend: http://localhost:5173
+echo ========================================
+echo ✅ Both servers starting!
 echo.
-echo Press any key to exit this window (servers will keep running)...
+echo 🌐 Frontend: http://localhost:5174
+echo 🔌 Backend:  http://localhost:8000
+echo 📚 API Docs: http://localhost:8000/docs
+echo ========================================
+echo.
+echo Press any key to exit (servers will keep running)...
 pause > nul

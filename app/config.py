@@ -19,7 +19,7 @@ class Settings(BaseSettings):
     debug: bool = False
     
     # CORS
-    allowed_origins: str = '["http://localhost:3000","http://localhost:5173"]'
+    allowed_origins: str = '["http://localhost:3000","http://localhost:5173","http://localhost:5174"]'
     
     # Fork Configuration
     tiger_use_virtual_forks: bool = True  # Free tier uses virtual forks
